@@ -1,6 +1,8 @@
-# rcmrs
+# VUE SPA
 
-> rcmrs with vue
+>vue前端项目
+>后端采用Springboot,配合后端SpringSecurity实现登陆,权限控制,包括根据登陆用户权限实现对路由的动态控制等等
+>后端Springboot日后再传
 
 ## Build Setup
 
