@@ -15,7 +15,7 @@ import baseInput from './components/base-components/baseInput'
 // iView
 Vue.use(iView)
 
-// 注册全局
+// 注册全局插件
 Vue.component('baseInput', baseInput)
 
 // 全局自定义过滤器
