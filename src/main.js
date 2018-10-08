@@ -12,7 +12,7 @@ import axios from 'axios'
 import Qs from 'qs'
 import baseInput from './components/base-components/baseInput'
 
-// ElementUi
+// iView
 Vue.use(iView)
 
 // 注册全局
