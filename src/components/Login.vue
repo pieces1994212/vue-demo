@@ -3,13 +3,17 @@
     <Form ref="formInline"
           inline>
       <FormItem prop="user">
-        <Input type="text" v-model="username" placeholder="Username">
+        <Input type="text"
+               v-model="username"
+               placeholder="Username">
         <Icon type="ios-person-outline"
               slot="prepend"></Icon>
         </Input>
       </FormItem>
       <FormItem prop="password">
-        <Input type="password" v-model="password" placeholder="Password">
+        <Input type="password"
+               v-model="password"
+               placeholder="Password">
         <Icon type="ios-lock-outline"
               slot="prepend"></Icon>
         </Input>
