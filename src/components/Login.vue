@@ -46,7 +46,7 @@ export default {
       let _this = this
       this.$axios.post('/login', this.qs.stringify({ 'rollrock': _this.username, 'rockroll': _this.password })).then(resp => {
         if (resp.data.status === 'success') {
-          // 这里模拟 后台接口返回的菜单权限列表
+          // 这里模拟后台接口返回的菜单权限列表
           let routes = [{
             path: 'view/Welcome',
             name: 'welcome',
