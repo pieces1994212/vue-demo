@@ -27,8 +27,8 @@ export default {
   name: 'Hello',
   data () {
     return {
-      username: '',
-      password: ''
+      username: 'spAdmin',
+      password: 'NJ18730dev'
     }
   },
   components: {
