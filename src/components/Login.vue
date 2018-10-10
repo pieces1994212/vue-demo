@@ -3,13 +3,17 @@
     <Form ref="formInline"
           inline>
       <FormItem prop="user">
-        <Input type="text" v-model="username" placeholder="Username">
+        <Input type="text"
+               v-model="username"
+               placeholder="Username">
         <Icon type="ios-person-outline"
               slot="prepend"></Icon>
         </Input>
       </FormItem>
       <FormItem prop="password">
-        <Input type="password" v-model="password" placeholder="Password">
+        <Input type="password"
+               v-model="password"
+               placeholder="Password">
         <Icon type="ios-lock-outline"
               slot="prepend"></Icon>
         </Input>
@@ -57,7 +61,7 @@ export default {
           _this.$store.commit({ type: 'base/loginSuccess', name: resp.data.username })
           // 路由跳转至home组件
           _this.$router.push('home')
-          _this.$Message.success('登陆成功')
+          _this.$Message.success('登陆成功!')
         } else {
           _this.$Message.error(resp.data.message)
         }

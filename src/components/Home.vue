@@ -68,9 +68,11 @@
                 <Icon type="ios-navigate"></Icon>
                 Item 1
               </template>
-              <router-link to="/home/"><MenuItem name="1-1">Welcome</MenuItem>
+              <router-link to="/home/">
+                <MenuItem name="1-1">Welcome</MenuItem>
               </router-link>
-              <router-link to="/home/data"><MenuItem name="1-2">Data</MenuItem>
+              <router-link to="/home/data">
+                <MenuItem name="1-2">Data</MenuItem>
               </router-link>
               <MenuItem name="1-3">Option 3</MenuItem>
             </Submenu>
