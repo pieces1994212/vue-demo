@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import axios from 'axios'
 
 // 启用Vuex
 Vue.use(Vuex)
@@ -9,7 +10,8 @@ const baseModule = {
   namespaced: true,
   state: {
     loginName: '',
-    extendsRoutes: []
+    extendsRoutes: [],
+    pfpItem: []
   },
   mutations: {
     loginSuccess (state, payload) {
@@ -22,6 +24,17 @@ const baseModule = {
     },
     addRoutes (state, payload) {
       state.extendsRoutes = payload.list
+    },
+    loadItem (state, payload) {
+      // 获取系统枚举
+      axios.post('/pfpcode/loadItem').then(resp => {
+        state.pfpItem = resp.data
+        resp.data.forEach(ele => {
+          window.localStorage.setItem('pfpitem_' + ele.no, ele.name)
+        })
+      }).catch(function (error) {
+        console.log(error)
+      })
     }
   },
   actions: {
@@ -34,8 +47,9 @@ const baseModule = {
     }
   },
   getters: {
-    searchMeters: (state) => (id) => {
-      return state.merList.find(mer => mer.id === id)
+    getItemByNo: (state) => (no) => {
+      let item = state.pfpItem.find(item => item.no === no)
+      return item
     }
   }
 }

@@ -27,6 +27,7 @@ Vue.filter('customfilter', function (value) {
 
 router.beforeEach((to, from, next) => {
   if (to) {
+    // 将当前访问路径存储到缓存，保证刷新后继续访问
     window.sessionStorage.setItem('curPath', to.path)
   }
   next()

@@ -31,8 +31,8 @@ export default {
   name: 'Hello',
   data () {
     return {
-      username: 'spAdmin',
-      password: 'NJ18730dev'
+      username: 'rcmrs',
+      password: 'Sasseur123'
     }
   },
   components: {
@@ -59,6 +59,8 @@ export default {
           initMenu(_this.$store, _this.$router, routes)
           // 将用户名commit到store
           _this.$store.commit({ type: 'base/loginSuccess', name: resp.data.username })
+          // store加载枚举
+          _this.$store.commit({ type: 'base/loadItem' })
           // 路由跳转至home组件
           _this.$router.push('home')
           _this.$Message.success('登陆成功!')
