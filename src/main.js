@@ -18,8 +18,59 @@ Vue.use(iView)
 // 注册全局组件
 Vue.component('baseInput', baseInput)
 
+// 学习render函数
+Vue.component('testRender', {
+  render: (h) => {
+    return h(
+      'div', // 标签名称
+      {
+        style: {
+          color: 'red',
+          fontSize: '20px'
+        },
+        props: {
+          titleee: {
+            type: String
+          }
+        }
+      },
+      [
+        h(
+          'h2', {
+            style: {
+              color: 'green'
+            }
+          },
+          this.$slots.default
+        )
+      ]
+    )
+  },
+  props: {
+    titlee: {
+      type: String
+    }
+  }
+})
+
+Vue.component('test-input', {
+  render: (h) => {
+    let self = this
+    return h('input', {
+      domProps: {
+        value: self.value
+      },
+      on: {
+        input: (event) => {
+          self.$emit('input', event.target.value)
+        }
+      }
+    })
+  }
+})
+
 // 全局自定义过滤器
-Vue.filter('customfilter', function (value) {
+Vue.filter('customfilter', (value) => {
   if (!value) return ''
   value = value.toString()
   return value.charAt(0).toUpperCase() + value.slice(1)

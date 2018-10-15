@@ -1,7 +1,8 @@
 <template>
   <div class="page-content"
        ref="content">
-    <tree-box :resType="treeType"></tree-box>
+    <tree-box :resType="treeType"
+              @on-select-change="selectTree"></tree-box>
     <div class="tree-side">
       <Table :columns="dataObj.columns"
              :data="dataObj.merList"
@@ -242,6 +243,9 @@ export default {
     handlePageSize (value) {
       this.dataObj.limit = value
       this.search()
+    },
+    selectTree (data) {
+      console.log(data)
     }
   },
   watch: {

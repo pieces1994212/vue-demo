@@ -1,11 +1,15 @@
 <template>
-  <span>welcome! my friend! {{username}}!</span>
+  <div>
+    <span>welcome! my friend! {{username}}!</span>
+    <test-input v-model="wtitle"></test-input>{{wtitle}}
+  </div>
 </template>
 <script>
 export default {
   name: 'welcome',
   data: function () {
     return {
+      wtitle: 'welcome'
     }
   },
   computed: {
