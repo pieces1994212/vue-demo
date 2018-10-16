@@ -17,18 +17,25 @@
             show-sizer
             class="page" />
     </div>
+    <data-modal :modalFlag='modifyModal'
+                :meter='modifyObj'
+                @modify-success='modifySuccess'
+                @modal-cancel="modalCancel"></data-modal>
   </div>
 </template>
-
 <script>
 import dataDetil from './DataDetils.vue'
 import treeBox from '../base-components/treeBox.vue'
+import dataModal from './DataModal.vue'
 export default {
   name: 'databox',
   data () {
     return {
+      searchParam: {
+        orgNo: ''
+      },
       treeType: 'meters',
-      tableHeight: window.innerHeight - 115,
+      tableHeight: window.innerHeight - 120,
       dataObj: {
         columns: [
           {
@@ -138,7 +145,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.show(params)
+                      this.modify(params)
                     }
                   }
                 }, '修改'),
@@ -168,17 +175,21 @@ export default {
         limit: 20,
         offset: 1,
         sizeOpts: [20, 50, 100]
-      }
+      },
+      modifyModal: false,
+      modifyObj: {}
     }
   },
   created: function () {
+    // 从store获取当前组织号
+    this.searchParam.orgNo = this.$store.state.base.orgNo
     this.search()
   },
   mounted: function () {
     const vm = this
     window.onresize = () => {
       return (() => {
-        vm.tableHeight = window.innerHeight - 115
+        vm.tableHeight = window.innerHeight - 120
       })()
     }
   },
@@ -188,11 +199,11 @@ export default {
     }
   },
   methods: {
-    show (params) {
-      // 修改弹框
+    modify (params) {
+      this.modifyObj = params.row
+      this.modifyModal = true
     },
     confirm (params) {
-      debugger
       this.$Modal.confirm({
         title: '确定删除表计档案？',
         content: '<p>表计编码 : ' + params.row.bizNo + '</p><p>表计名称 : ' + params.row.name + '</p><p>组织单位 : ' + params.row.orgName + '</p><p>注意！确定删除后档案将不可恢复!</p>',
@@ -201,13 +212,19 @@ export default {
         }
       })
     },
+    modifySuccess () {
+      this.search()
+      this.modifyModal = false
+    },
+    modalCancel () {
+      this.modifyModal = false
+    },
     delete (params) {
       const _this = this
       this.$axios.post('/meterManage/deleteMeters',
         this.qs.stringify({
           'id': params.row.id
         })).then(resp => {
-        debugger
         if (resp.request.responseText === 'true') {
           _this.$Message.success('表计档案：' + params.row.name + '删除成功!')
           _this.search()
@@ -222,7 +239,7 @@ export default {
       const _this = this
       this.$axios.post('/meterManage/querryMeterByOrg',
         this.qs.stringify({
-          'orgNo': 10,
+          'orgNo': _this.searchParam.orgNo,
           'limit': _this.dataObj.limit,
           'offset': _this.dataObj.offset
         })).then(resp => {
@@ -245,7 +262,8 @@ export default {
       this.search()
     },
     selectTree (data) {
-      console.log(data)
+      this.searchParam.orgNo = data.no
+      this.search()
     }
   },
   watch: {
@@ -261,7 +279,8 @@ export default {
     }
   },
   components: {
-    treeBox
+    treeBox,
+    dataModal
   }
 }
 </script>

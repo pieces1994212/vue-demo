@@ -3,7 +3,8 @@
     <tree v-bind="$attrs"
           :data="treeData"
           @on-select-change="onSelect"
-          :render="renderContent">
+          :render="renderContent"
+          ref='tree'>
     </tree>
   </div>
 </template>
@@ -13,9 +14,11 @@ export default {
   inheritAttrs: false, // 禁用特性继承，利用$attrs获取父组件传入特性绑定到tree上，保证插件原有multiple，show-checkbox等特性正常使用
   data: function () {
     return {
+      orgNo: this.$store.state.base.orgNo,
       treeType: this.resType,
       treeData: [],
-      selectedNode: ''
+      selectedNode: '',
+      hoverNode: ''
     }
   },
   props: {
@@ -28,30 +31,41 @@ export default {
     },
     renderContent (h, { root, node, data }) {
       let isSelected = false
+      let isHover = false
       if (this.selectedNode === node.nodeKey) {
         isSelected = true
       }
+      if (this.hoverNode === node.nodeKey) {
+        isHover = true
+      }
       let iconSrc = ''
-      switch (data.type) {
-        case 1:
+      switch (parseInt(data.type)) {
+        case 796:
           iconSrc = 'img/jsTree/town.png'
           break
-        case 2:
+        case 798:
           iconSrc = 'img/jsTree/building.png'
           break
-        case 3:
+        case 799:
           iconSrc = 'img/jsTree/floor.png'
           break
       }
-      return h('div', {
+      return h('a', {
         class: {
           treeSpan: true,
-          treeSelected: isSelected
+          treeSelected: isSelected,
+          treeHover: isHover
         },
         on: {
           click: (event) => {
             this.selectedNode = node.nodeKey
             this.$emit('on-select-change', data)
+          },
+          mouseover: (event) => {
+            this.hoverNode = node.nodeKey
+          },
+          mouseleave: (event) => {
+            this.hoverNode = ''
           }
         }
       }, [
@@ -71,74 +85,45 @@ export default {
           class: {
             treeSpanName: true
           }
-        }, data.title)])
+        }, data.text)])
       ])
     }
   },
   mounted: function () {
-    let vm = this
-    if (vm.treeType && vm.treeType === 'meters') {
-      vm.treeData = [
-        {
-          title: '南京未来科技城',
-          expand: true,
-          type: 1,
-          orgNo: 3201,
-          children: [
-            {
-              title: '创服8号楼',
-              orgNo: 32011,
-              type: 2,
-              expand: true,
-              children: [
-                {
-                  title: '1层',
-                  type: 3,
-                  orgNo: 320111
-                },
-                {
-                  title: '2层',
-                  type: 3,
-                  orgNo: 320112
-                }
-              ]
-            },
-            {
-              title: '创服9号楼',
-              expand: true,
-              orgNo: 32012,
-              type: 2,
-              children: [
-                {
-                  title: '1层',
-                  type: 3,
-                  orgNo: 320121
-                },
-                {
-                  title: '2层',
-                  type: 3,
-                  orgNo: 320122
-                }
-              ]
-            }
-          ]
-        }
-      ]
+    let _this = this
+    let queryUrl = ''
+    if (_this.treeType && _this.treeType === 'meters') {
+      queryUrl = '/jsTreeFactory/queryOrgTree'
     }
-    // vm.$axios.post('/jsTreeFactory/queryOrgTree',
-    //   vm.qs.stringify({
-    //     'no': 101
-    //   })).then(resp => {
-    //   vm.treeData = resp.data
-    // }).catch(function (error) {
-    //   console.log(error)
-    // })
+    _this.$axios.post(queryUrl,
+      _this.qs.stringify({
+        'no': _this.orgNo
+      })).then(resp => {
+      let ary = []
+      ary.push(resp.data)
+      _this.treeData = ary
+    }).catch(function (error) {
+      console.log(error)
+    })
+    this.selectedNode = 0
   }
 }
 </script>
 <style>
+.tree-box {
+  float: left;
+  width: 200px;
+  height: 100%;
+  text-align: left;
+  font-size: 14px;
+  overflow: auto;
+  margin-right: 10px;
+  border: 1px solid #dcdee2;
+  padding: 8px;
+  background-color: #ffffff;
+}
 .treeLogo {
-  margin: 0 2px;
+  margin-right: 2px;
   position: relative;
   top: 2px;
   width: 15px;
@@ -157,10 +142,16 @@ export default {
 .treeSelected {
   background-color: #bee1ff;
 }
+.treeHover {
+  background-color: #d1e5f7;
+}
 .treeSpanName {
   font-size: 12px;
   position: relative;
   bottom: 1px;
   color: #515a6e;
+}
+.ivu-tree ul li {
+  margin: 2px 0px;
 }
 </style>

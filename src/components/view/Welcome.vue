@@ -1,7 +1,6 @@
 <template>
   <div>
     <span>welcome! my friend! {{username}}!</span>
-    <test-input v-model="wtitle"></test-input>{{wtitle}}
   </div>
 </template>
 <script>

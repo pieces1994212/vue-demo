@@ -10,6 +10,7 @@ const baseModule = {
   namespaced: true,
   state: {
     loginName: '',
+    orgNo: 101,
     extendsRoutes: [],
     pfpItem: []
   },

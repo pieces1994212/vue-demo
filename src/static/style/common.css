@@ -12,20 +12,44 @@ body {
   height: 100%
 }
 
+.content {}
+
 .tree-side {
   float: left;
-  width: calc(100% - 200px);
+  width: calc(100% - 210px);
   height: 100%;
+  border: 1px solid #dcdee2;
+  background-color: #ffffff;
 }
 
-.tree-box {
-  float: left;
-  width: 200px;
-  height: 100%;
-  text-align: left;
-  font-size: 14px;
+.page {
+  margin-top: 4px;
 }
 
-.page{
-  margin-top: 5px;
+.ivu-table-wrapper {
+  border: none;
+}
+
+::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+  background-color: #ffffff;
+  border-left: 1px solid #e8eaec
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #ffffff;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+span.span-key {
+  height: 32px;
+  line-height: 32px;
+  float: right;
+  font-size: 13px;
+}
+
+.m-b-10 {
+  margin-bottom: 10px
 }

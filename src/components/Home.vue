@@ -77,7 +77,7 @@
             <BreadcrumbItem>Components</BreadcrumbItem>
             <BreadcrumbItem>Layout</BreadcrumbItem>
           </Breadcrumb> -->
-          <Content :style="{padding: '10px', height: '100%', background: '#fff'}">
+          <Content :style="{padding: '10px', height: '100%', background: '#f3f3f4'}" >
             <keep-alive>
               <router-view></router-view>
             </keep-alive>
