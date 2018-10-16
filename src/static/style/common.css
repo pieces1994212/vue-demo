@@ -12,8 +12,6 @@ body {
   height: 100%
 }
 
-.content {}
-
 .tree-side {
   float: left;
   width: calc(100% - 210px);
