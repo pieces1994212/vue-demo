@@ -1,6 +1,7 @@
 <template>
   <Select :value="val"
           v-on="selectListeners">
+    <Option :value="''"></Option>
     <Option v-for="item in items"
             :value="parseInt(item.no)"
             :key="item.no">{{ item.name }}</Option>

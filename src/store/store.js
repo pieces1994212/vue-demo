@@ -10,17 +10,20 @@ const baseModule = {
   namespaced: true,
   state: {
     loginName: '',
-    orgNo: 101,
+    orgNo: '',
     extendsRoutes: [],
     pfpItem: []
   },
   mutations: {
     loginSuccess (state, payload) {
       state.loginName = payload.name
+      state.orgNo = 101
       window.sessionStorage.setItem('user', payload.name)
     },
     loginOut (state, payload) {
       state.loginName = ''
+      state.orgNo = null
+      state.extendsRoutes = []
       window.sessionStorage.removeItem('user')
     },
     addRoutes (state, payload) {

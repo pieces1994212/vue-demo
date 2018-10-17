@@ -1,7 +1,9 @@
 <template>
-  <div>
-    <Form ref="formInline"
-          inline>
+  <div class="login-content">
+    <div class="vue-logo">
+      <img src="/img/logo.png">
+    </div>
+    <Form ref="formInline">
       <FormItem prop="user">
         <Input type="text"
                v-model="username"
@@ -76,6 +78,13 @@ export default {
 </script>
 <!-- Add 'scoped' attribute to limit CSS to this component only -->
 <style scoped>
+.ivu-form-item {
+  margin-bottom: 24px;
+  vertical-align: top;
+  zoom: 1;
+  width: 330px;
+  margin-left: calc(50% - 165px);
+}
 ul li {
   margin-right: 10px;
   list-style: none;
@@ -91,5 +100,12 @@ ul li {
 }
 .list-move {
   transition: transform 1s;
+}
+.vue-logo {
+  width: 200px;
+  height: 200px;
+  margin-left: calc(50% - 100px);
+  margin-top: 160px;
+  margin-bottom: 20px;
 }
 </style>

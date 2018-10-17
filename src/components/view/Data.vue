@@ -1,21 +1,107 @@
 <template>
   <div class="page-content"
        ref="content">
-    <tree-box :resType="treeType"
+    <tree-box :resType="'meters'"
               @on-select-change="selectTree"></tree-box>
     <div class="tree-side">
-      <Table :columns="dataObj.columns"
-             :data="dataObj.merList"
-             :height="tableHeight"
-             ref="table"></Table>
-      <Page :total="dataObj.total"
-            :page-size="dataObj.limit"
-            :page-size-opts="dataObj.sizeOpts"
-            size="small"
-            @on-change="handlePage"
-            @on-page-size-change='handlePageSize'
-            show-sizer
-            class="page" />
+      <div class="serach-area"
+           ref="serachArea">
+        <Row :gutter="8"
+             class="m-b-10">
+          <Col span="2">
+          <span class="serach-label">仪表编号: </span>
+          </Col>
+          <Col span="4">
+          <Input v-model="searchParam.bizNo"
+                 clearable></Input>
+          </Col>
+          <Col span="3">
+          <span class="serach-label">仪表名称: </span>
+          </Col>
+          <Col span="4">
+          <Input v-model="searchParam.name"
+                 clearable></Input>
+          </Col>
+          <Col span="3">
+          <span class="serach-label">运行状态: </span>
+          </Col>
+          <Col span="4">
+          <itemSelect v-model="searchParam.statusCode"
+                      :codeSortId='1000000110000019'></itemSelect>
+          </Col>
+          <Col span="4">
+          <ButtonGroup>
+            <Button type="primary"
+                    icon="ios-search"
+                    label="large"
+                    @click="search">搜索</Button>
+            <Button type="primary"
+                    :icon="serachControl.icon"
+                    class="serach-plus"
+                    label="large"
+                    @click="showPlus"></Button>
+          </ButtonGroup>
+          </Col>
+        </Row>
+        <Row :gutter="8"
+             class="m-b-10"
+             v-show="serachControl.flag">
+          <Col span="2">
+          <span class="serach-label">终端名称:</span>
+          </Col>
+          <Col span="4">
+          <Input v-model="searchParam.terminalName"
+                 clearable></Input>
+          </Col>
+          <Col span="3">
+          <span class="serach-label">终端编码:</span>
+          </Col>
+          <Col span="4">
+          <Input v-model="searchParam.terminalNo"
+                 clearable></Input>
+          </Col>
+          <Col span="3">
+          <span class="serach-label">终端通信地址:</span>
+          </Col>
+          <Col span="4">
+          <Input v-model="searchParam.terminalCommAddrChars"
+                 clearable></Input>
+          </Col>
+        </Row>
+        <Row :gutter="8"
+             v-show="serachControl.flag">
+          <Col span="2">
+          <span class="serach-label">通信地址:</span>
+          </Col>
+          <Col span="4">
+          <Input v-model="searchParam.commAddrChars"
+                 clearable></Input>
+          </Col>
+          <Col span="3">
+          <span class="serach-label">通信序号:</span>
+          </Col>
+          <Col span="4">
+          <Input v-model="searchParam.commIndex"
+                 clearable></Input>
+          </Col>
+        </Row>
+      </div>
+      <div class="data-area">
+        <Table :columns="dataObj.columns"
+               :data="dataObj.merList"
+               :height="tableHeight"
+               ref="table"></Table>
+        <div class="data-page">
+          <Page :total="searchParam.total"
+                :page-size="searchParam.limit"
+                :page-size-opts="searchParam.sizeOpts"
+                size="small"
+                @on-change="handlePage"
+                @on-page-size-change='handlePageSize'
+                show-sizer
+                class="page" />
+        </div>
+      </div>
     </div>
     <data-modal :modalFlag='modifyModal'
                 :meter='modifyObj'
@@ -27,15 +113,22 @@
 import dataDetil from './DataDetils.vue'
 import treeBox from '../base-components/treeBox.vue'
 import dataModal from './DataModal.vue'
+import itemSelect from '../base-components/ItemSelect.vue'
 export default {
   name: 'databox',
   data () {
     return {
       searchParam: {
-        orgNo: ''
+        total: 0,
+        limit: 20,
+        offset: 1,
+        sizeOpts: [20, 50, 100]
       },
-      treeType: 'meters',
-      tableHeight: window.innerHeight - 120,
+      serachControl: {
+        icon: 'ios-arrow-down',
+        flag: false
+      },
+      tableHeight: 0,
       dataObj: {
         columns: [
           {
@@ -161,7 +254,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.confirm(params)
+                      this.delete(params)
                     }
                   }
                 }, '删除')
@@ -170,11 +263,7 @@ export default {
             align: 'center'
           }
         ],
-        merList: [],
-        total: 0,
-        limit: 20,
-        offset: 1,
-        sizeOpts: [20, 50, 100]
+        merList: []
       },
       modifyModal: false,
       modifyObj: {}
@@ -186,10 +275,11 @@ export default {
     this.search()
   },
   mounted: function () {
-    const vm = this
+    const _this = this
+    this.autoHeight()
     window.onresize = () => {
       return (() => {
-        vm.tableHeight = window.innerHeight - 120
+        _this.autoHeight()
       })()
     }
   },
@@ -199,16 +289,41 @@ export default {
     }
   },
   methods: {
+    autoHeight () {
+      let serachHeight = this.$refs.serachArea.offsetHeight
+      this.tableHeight = window.innerHeight - 130 - serachHeight
+    },
+    showPlus () {
+      this.serachControl.flag = !this.serachControl.flag
+      this.serachControl.icon = this.serachControl.flag ? 'ios-arrow-up' : 'ios-arrow-down'
+      this.serachControl.flag ? this.tableHeight -= 74 : this.tableHeight += 74
+    },
     modify (params) {
-      this.modifyObj = params.row
+      this.modifyObj = { ...params.row }
       this.modifyModal = true
     },
-    confirm (params) {
+    delete (params) {
       this.$Modal.confirm({
         title: '确定删除表计档案？',
-        content: '<p>表计编码 : ' + params.row.bizNo + '</p><p>表计名称 : ' + params.row.name + '</p><p>组织单位 : ' + params.row.orgName + '</p><p>注意！确定删除后档案将不可恢复!</p>',
+        content: '</p><p>注意！确定删除后档案将不可恢复!</p>',
+        loading: true,
         onOk: () => {
-          this.delete(params)
+          let _this = this
+          _this.$axios.post('/meterManage/deleteMeters',
+            _this.qs.stringify({
+              'id': params.row.id
+            })).then(resp => {
+            if (resp.request.responseText === 'true') {
+              _this.$Modal.remove()
+              _this.$Message.success('表计档案：' + params.row.name + '删除成功!')
+              _this.search()
+            } else {
+              _this.$Modal.remove()
+              _this.$Message.error('操作错误!')
+            }
+          }).catch(function (error) {
+            console.log(error)
+          })
         }
       })
     },
@@ -219,33 +334,13 @@ export default {
     modalCancel () {
       this.modifyModal = false
     },
-    delete (params) {
-      const _this = this
-      this.$axios.post('/meterManage/deleteMeters',
-        this.qs.stringify({
-          'id': params.row.id
-        })).then(resp => {
-        if (resp.request.responseText === 'true') {
-          _this.$Message.success('表计档案：' + params.row.name + '删除成功!')
-          _this.search()
-        } else {
-          _this.$Message.error('操作错误!')
-        }
-      }).catch(function (error) {
-        console.log(error)
-      })
-    },
     search () {
       const _this = this
       this.$axios.post('/meterManage/querryMeterByOrg',
-        this.qs.stringify({
-          'orgNo': _this.searchParam.orgNo,
-          'limit': _this.dataObj.limit,
-          'offset': _this.dataObj.offset
-        })).then(resp => {
+        this.qs.stringify(_this.searchParam)).then(resp => {
         if (resp) {
           _this.dataObj.merList = resp.data.rows
-          _this.dataObj.total = resp.data.total
+          _this.searchParam.total = resp.data.total
         } else {
           _this.dataObj.message = resp.data.message
         }
@@ -254,11 +349,11 @@ export default {
       })
     },
     handlePage (value) {
-      this.dataObj.offset = value
+      this.searchParam.offset = value
       this.search()
     },
     handlePageSize (value) {
-      this.dataObj.limit = value
+      this.searchParam.limit = value
       this.search()
     },
     selectTree (data) {
@@ -280,7 +375,8 @@ export default {
   },
   components: {
     treeBox,
-    dataModal
+    dataModal,
+    itemSelect
   }
 }
 </script>
