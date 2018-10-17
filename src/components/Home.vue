@@ -47,36 +47,18 @@
         <Sider hide-trigger
                :style="{background: '#fff'}">
           <Menu theme="light"
-                width="auto"
-                :open-names="['1']">
-            <Submenu name="1">
+                width="auto">
+            <Submenu :name="item.name"
+                     v-for="item in routes"
+                     :key="item.name">
               <template slot="title">
-                <Icon type="ios-navigate"></Icon>
-                档案管理
+                <Icon :type="item.icon"></Icon>
+                {{item.name}}
               </template>
-              <router-link to="/home/">
-                <MenuItem name="1-1">Welcome</MenuItem>
-              </router-link>
-              <router-link to="/home/data">
-                <MenuItem name="1-2">表计档案</MenuItem>
-              </router-link>
-              <MenuItem name="1-3">终端档案</MenuItem>
-            </Submenu>
-            <Submenu name="2">
-              <template slot="title">
-                <Icon type="ios-keypad"></Icon>
-                Item 2
-              </template>
-              <MenuItem name="2-1">Option 1</MenuItem>
-              <MenuItem name="2-2">Option 2</MenuItem>
-            </Submenu>
-            <Submenu name="3">
-              <template slot="title">
-                <Icon type="ios-analytics"></Icon>
-                Item 3
-              </template>
-              <MenuItem name="3-1">Option 1</MenuItem>
-              <MenuItem name="3-2">Option 2</MenuItem>
+              <MenuItem v-for="citem in item.child"
+                        :key="citem.path"
+                        :name="citem.path"
+                        :to="citem.path">{{citem.name}}</MenuItem>
             </Submenu>
           </Menu>
         </Sider>
@@ -99,6 +81,45 @@
 <script>
 export default {
   name: 'home',
+  data: function () {
+    return {
+      routes: [
+        {
+          name: '档案管理',
+          icon: 'ios-navigate',
+          child: [
+            {
+              name: 'welcome',
+              path: '/home/'
+            },
+            {
+              name: '仪表档案',
+              path: '/home/data'
+            }, {
+              name: '终端档案',
+              path: '/home/ter'
+            }
+          ]
+        }, {
+          name: '抄表数据',
+          icon: 'ios-keypad',
+          child: [
+            {
+              name: '数据统计',
+              path: '/home/ter1'
+            },
+            {
+              name: '数据报表',
+              path: '/home/ter2'
+            }, {
+              name: '数据分析',
+              path: '/home/ter3'
+            }
+          ]
+        }
+      ]
+    }
+  },
   methods: {
     loginOut () {
       this.$store.commit({ type: 'base/loginOut' })

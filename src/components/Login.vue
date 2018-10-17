@@ -55,7 +55,7 @@ export default {
             url: '/'
           }, {
             path: 'view/Data',
-            name: 'data',
+            name: '仪表档案',
             url: 'data'
           }]
           initMenu(_this.$store, _this.$router, routes)
@@ -63,7 +63,7 @@ export default {
           _this.$store.commit({ type: 'base/loginSuccess', name: resp.data.username })
           // store加载枚举
           _this.$store.commit({ type: 'base/loadItem' })
-          // 路由跳转至home组件
+          // 路由跳转至home
           _this.$router.push('home')
           _this.$Message.success('登陆成功!')
         } else {
