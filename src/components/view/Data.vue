@@ -284,8 +284,17 @@ export default {
     }
   },
   computed: {
-    loginName: function () {
-      return window.sessionStorage.getItem('user')
+  },
+  watch: {
+    tableHeight (val) {
+      if (!this.timer) {
+        this.tableHeight = val
+        this.timer = true
+        let that = this
+        setTimeout(function () {
+          that.timer = false
+        }, 300)
+      }
     }
   },
   methods: {
@@ -359,18 +368,6 @@ export default {
     selectTree (data) {
       this.searchParam.orgNo = data.no
       this.search()
-    }
-  },
-  watch: {
-    fullHeight (val) {
-      if (!this.timer) {
-        this.tableHeight = val
-        this.timer = true
-        let that = this
-        setTimeout(function () {
-          that.timer = false
-        }, 300)
-      }
     }
   },
   components: {
