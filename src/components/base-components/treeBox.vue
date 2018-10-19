@@ -15,7 +15,6 @@ export default {
   data: function () {
     return {
       orgNo: this.$store.state.base.orgNo,
-      treeType: this.resType,
       treeData: [],
       selectedNode: '',
       hoverNode: ''
@@ -92,7 +91,7 @@ export default {
   mounted: function () {
     let _this = this
     let queryUrl = ''
-    if (_this.treeType && _this.treeType === 'meters') {
+    if (_this.resType && _this.resType === 'meters') {
       queryUrl = '/jsTreeFactory/queryOrgTree'
     }
     _this.$axios.post(queryUrl,
