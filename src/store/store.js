@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import axios from 'axios'
+import {
+  Axios
+} from '../utils/customAxios'
 
 // 启用Vuex
 Vue.use(Vuex)
@@ -29,25 +31,24 @@ const baseModule = {
     addRoutes (state, payload) {
       state.extendsRoutes = payload.list
     },
-    loadItem (state, payload) {
-      // 获取系统枚举
-      axios.post('/pfpcode/loadItem').then(resp => {
-        state.pfpItem = resp.data
-        resp.data.forEach(ele => {
-          window.localStorage.setItem('pfpitem_' + ele.no, ele.name)
-        })
-      }).catch(function (error) {
-        console.log(error)
-      })
+    addItem (state, payload) {
+      state.pfpItem = payload.list
     }
   },
   actions: {
-    setMerList ({
+    loadItem ({
       commit
-    }, payload) {
-      setTimeout(() => {
-        commit('setMerList', payload)
-      }, 100)
+    }) {
+      // 获取系统枚举
+      Axios.post('/pfpcode/loadItem').then(resp => {
+        commit({
+          type: 'addItem',
+          list: resp.data
+        })
+        resp.data.forEach(ele => {
+          window.localStorage.setItem('pfpitem_' + ele.no, ele.name)
+        })
+      })
     }
   },
   getters: {

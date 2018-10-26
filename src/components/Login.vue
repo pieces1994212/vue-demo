@@ -46,7 +46,7 @@ export default {
   methods: {
     login () {
       let _this = this
-      this.$axios.post('/login', this.qs.stringify({ 'rollrock': _this.username, 'rockroll': _this.password })).then(resp => {
+      this.$axios.post('/login', { 'rollrock': _this.username, 'rockroll': _this.password }).then(resp => {
         if (resp.data.status === 'success') {
           // 这里模拟后台接口返回的菜单权限列表
           let routes = [{
@@ -62,15 +62,13 @@ export default {
           // 将用户名commit到store
           _this.$store.commit({ type: 'base/loginSuccess', name: resp.data.username })
           // store加载枚举
-          _this.$store.commit({ type: 'base/loadItem' })
+          _this.$store.dispatch('base/loadItem')
           // 路由跳转至home
           _this.$router.push('home')
           _this.$Message.success('登陆成功!')
         } else {
           _this.$Message.error(resp.data.message)
         }
-      }).catch(function (error) {
-        console.log(error)
       })
     }
   }

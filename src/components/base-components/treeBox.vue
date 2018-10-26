@@ -95,9 +95,9 @@ export default {
       queryUrl = '/jsTreeFactory/queryOrgTree'
     }
     _this.$axios.post(queryUrl,
-      _this.qs.stringify({
+      {
         'no': _this.orgNo
-      })).then(resp => {
+      }).then(resp => {
       let ary = []
       ary.push(resp.data)
       _this.treeData = ary

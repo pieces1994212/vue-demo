@@ -35,12 +35,10 @@ export default {
   created: function () {
     let _this = this
     _this.$axios.post('/pfpcode/loadItem',
-      _this.qs.stringify({
+      {
         'codeSortId': _this.codeSortId
-      })).then(resp => {
+      }).then(resp => {
       _this.items = resp.data
-    }).catch(function (error) {
-      console.log(error)
     })
   }
 }

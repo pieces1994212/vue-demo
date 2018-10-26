@@ -319,9 +319,9 @@ export default {
         onOk: () => {
           let _this = this
           _this.$axios.post('/meterManage/deleteMeters',
-            _this.qs.stringify({
+            {
               'id': params.row.id
-            })).then(resp => {
+            }).then(resp => {
             if (resp.request.responseText === 'true') {
               _this.$Modal.remove()
               _this.$Message.success('表计档案：' + params.row.name + '删除成功!')
@@ -330,8 +330,6 @@ export default {
               _this.$Modal.remove()
               _this.$Message.error('操作错误!')
             }
-          }).catch(function (error) {
-            console.log(error)
           })
         }
       })
@@ -346,15 +344,13 @@ export default {
     search () {
       const _this = this
       this.$axios.post('/meterManage/querryMeterByOrg',
-        this.qs.stringify(_this.searchParam)).then(resp => {
+        _this.searchParam).then(resp => {
         if (resp) {
           _this.dataObj.merList = resp.data.rows
           _this.searchParam.total = resp.data.total
         } else {
           _this.dataObj.message = resp.data.message
         }
-      }).catch(function (error) {
-        console.log(error)
       })
     },
     handlePage (value) {

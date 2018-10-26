@@ -37,7 +37,7 @@ export default {
           // 重新加载登陆信息
           _this.$store.commit({ type: 'base/loginSuccess', name: username })
           // store加载枚举
-          _this.$store.commit({ type: 'base/loadItem' })
+          _this.$store.dispatch('base/loadItem')
           // 获取刷新时用户访问组件的path，有则加载到其位置
           let curPath = window.sessionStorage.getItem('curPath')
           _this.$router.push({ path: curPath || '/home' })

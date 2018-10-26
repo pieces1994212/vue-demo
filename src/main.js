@@ -8,66 +8,17 @@ import './static/style/common.css'
 import './static/js/common.js'
 import router from './router/index.js'
 import store from './store/store.js'
-import axios from 'axios'
-import Qs from 'qs'
 import baseInput from './components/base-components/baseInput'
+import {AxiosPlugin} from './utils/customAxios'
 
 // iView
 Vue.use(iView)
 
+// 使用客制化的axios
+Vue.use(AxiosPlugin)
+
 // 注册全局组件
 Vue.component('baseInput', baseInput)
-
-// 学习render函数
-Vue.component('testRender', {
-  render: (h) => {
-    return h(
-      'div', // 标签名称
-      {
-        style: {
-          color: 'red',
-          fontSize: '20px'
-        },
-        props: {
-          titleee: {
-            type: String
-          }
-        }
-      },
-      [
-        h(
-          'h2', {
-            style: {
-              color: 'green'
-            }
-          },
-          this.$slots.default
-        )
-      ]
-    )
-  },
-  props: {
-    titlee: {
-      type: String
-    }
-  }
-})
-
-Vue.component('test-input', {
-  render: (h) => {
-    let self = this
-    return h('input', {
-      domProps: {
-        value: self.value
-      },
-      on: {
-        input: (event) => {
-          self.$emit('input', event.target.value)
-        }
-      }
-    })
-  }
-})
 
 // 全局自定义过滤器
 Vue.filter('customfilter', (value) => {
@@ -75,23 +26,6 @@ Vue.filter('customfilter', (value) => {
   value = value.toString()
   return value.charAt(0).toUpperCase() + value.slice(1)
 })
-
-router.beforeEach((to, from, next) => {
-  if (to) {
-    // 将当前访问路径存储到缓存，保证刷新后继续访问
-    window.sessionStorage.setItem('curPath', to.path)
-  }
-  next()
-})
-
-// baseURL目前通过porxy代理解决
-// axios.defaults.baseURL = 'http://127.0.0.1:8080'
-// 携带验证信息以通过springsecurity验证
-axios.defaults.withCredentials = true
-
-// 将axios与qs挂载到Vue上
-Vue.prototype.$axios = axios
-Vue.prototype.qs = Qs
 
 // 根实例
 new Vue({

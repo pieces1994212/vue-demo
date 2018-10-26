@@ -80,14 +80,14 @@ export default {
       let _this = this
       _this.isLoading = true // 按钮进入加载状态
       _this.$axios.post('/meterManage/modifyMeter',
-        _this.qs.stringify({
+        {
           'id': _this.mer.id,
           'name': _this.mer.name,
           'statusCode': _this.mer.statusCode,
           'commIndex': _this.mer.commIndex,
           'eqpCode': _this.mer.eqpCode,
           'terminalId': _this.mer.terminalId
-        })).then(resp => {
+        }).then(resp => {
         if (resp.data === true) {
           _this.$emit('modify-success')
           _this.isLoading = false
