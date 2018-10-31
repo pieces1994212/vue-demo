@@ -90,6 +90,7 @@
         <Table :columns="dataObj.columns"
                :data="dataObj.merList"
                :height="tableHeight"
+               :loading="loadingFlag"
                ref="table"></Table>
         <div class="data-page">
           <Page :total="searchParam.total"
@@ -266,7 +267,8 @@ export default {
         merList: []
       },
       modifyModal: false,
-      modifyObj: {}
+      modifyObj: {},
+      loadingFlag: false
     }
   },
   created: function () {
@@ -343,13 +345,16 @@ export default {
     },
     search () {
       const _this = this
+      this.loadingFlag = true
       this.$axios.post('/meterManage/querryMeterByOrg',
         _this.searchParam).then(resp => {
         if (resp) {
           _this.dataObj.merList = resp.data.rows
           _this.searchParam.total = resp.data.total
+          this.loadingFlag = false
         } else {
           _this.dataObj.message = resp.data.message
+          this.loadingFlag = false
         }
       })
     },
