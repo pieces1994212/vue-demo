@@ -65,9 +65,6 @@ const baseModule = {
           type: 'setUserInfo',
           user: resp.data
         })
-        resp.data.forEach(ele => {
-          window.localStorage.setItem('pfpitem_' + ele.no, ele.name)
-        })
       })
     }
   },
