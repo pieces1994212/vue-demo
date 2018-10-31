@@ -36,6 +36,8 @@ export default {
           initMenu(_this.$store, _this.$router, routes)
           // 重新加载登陆信息
           _this.$store.commit({ type: 'base/loginSuccess', name: username })
+          // 加载用户信息
+          _this.$store.dispatch('base/loadUserInfo')
           // store加载枚举
           _this.$store.dispatch('base/loadItem')
           // 获取刷新时用户访问组件的path，有则加载到其位置

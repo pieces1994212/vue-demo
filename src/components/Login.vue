@@ -61,6 +61,8 @@ export default {
           initMenu(_this.$store, _this.$router, routes)
           // 将用户名commit到store
           _this.$store.commit({ type: 'base/loginSuccess', name: resp.data.username })
+          // 加载用户信息
+          _this.$store.dispatch('base/loadUserInfo')
           // store加载枚举
           _this.$store.dispatch('base/loadItem')
           // 路由跳转至home
