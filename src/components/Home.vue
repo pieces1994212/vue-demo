@@ -122,8 +122,14 @@ export default {
   },
   methods: {
     loginOut () {
-      this.$store.commit({ type: 'base/loginOut' })
-      this.$router.push({ path: '/' })
+      const _this = this
+      _this.$axios.post('/logout').then(resp => {
+        if (resp.status === 200) {
+          _this.$store.commit({ type: 'base/loginOut' })
+          _this.$router.push({ path: '/' })
+          _this.$Message.success('您已注销!')
+        }
+      })
     }
   }
 }
