@@ -60,7 +60,7 @@ const baseModule = {
       commit
     }) {
       // 加载用户信息，组织号等
-      Axios.post('/pfpfunction/queryCurrentUserInfo').then(resp => {
+      Axios.post('/api/common/queryCurrentUserInfo').then(resp => {
         commit({
           type: 'setUserInfo',
           user: resp.data
