@@ -1,7 +1,7 @@
 <template>
   <div class="login-content">
     <div class="vue-logo">
-      <img src="/img/logo.png">
+      <img src="../assets/logo.png">
     </div>
     <Form ref="formInline">
       <FormItem prop="user">
@@ -29,6 +29,7 @@
 </template>
 <script>
 import { initMenu } from '../utils/menu'
+// import logo from '../static/img/logo.png'
 export default {
   name: 'Hello',
   data () {

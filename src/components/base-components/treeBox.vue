@@ -29,6 +29,7 @@ export default {
       this.$emit('on-select-change', data)
     },
     renderContent (h, { root, node, data }) {
+      let _this = this
       let isSelected = false
       let isHover = false
       if (this.selectedNode === node.nodeKey) {
@@ -40,13 +41,13 @@ export default {
       let iconSrc = ''
       switch (parseInt(data.type)) {
         case 796:
-          iconSrc = 'img/jsTree/town.png'
+          iconSrc = require('@/assets/tree/town.png')
           break
         case 798:
-          iconSrc = 'img/jsTree/building.png'
+          iconSrc = require('@/assets/tree/building.png')
           break
         case 799:
-          iconSrc = 'img/jsTree/floor.png'
+          iconSrc = require('@/assets/tree/floor.png')
           break
       }
       return h('a', {
@@ -58,7 +59,8 @@ export default {
         on: {
           click: (event) => {
             this.selectedNode = node.nodeKey
-            this.$emit('on-select-change', data)
+            _this.onSelect(data)
+            // this.$emit('on-select-change', data)
           },
           mouseover: (event) => {
             this.hoverNode = node.nodeKey
